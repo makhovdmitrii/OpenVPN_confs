@@ -50,7 +50,7 @@ cp vars.example vars
 #    export KEY_CITY="SanFrancisco"
 #    export KEY_ORG="Fort-Funston"
 #    export KEY_EMAIL="mail@domain"
-
+./easyrsa init-pki
 ./easyrsa build-ca nopass
 ./easyrsa build-server-full server nopass
 ./easyrsa gen-dh nopass
