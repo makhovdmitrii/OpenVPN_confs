@@ -60,3 +60,13 @@ cp vars.example vars
 ./easyrsa build-client-full user4 nopass
 ./easyrsa build-client-full user5 nopass
 openssl dhparam -out dh1024.pem 1024
+
+#For condor tun certs creation begin
+cp vars.example vars
+./easyrsa init-pki
+./easyrsa --batch --req-cn="server" build-ca nopass
+./easyrsa --batch build-server-full "server" nopass
+EASYRSA_CRL_DAYS=3650 ./easyrsa gen-crl
+openvpn --genkey --secret ./tls-crypt.key
+./easyrsa --batch build-client-full "client" nopass
+#For condor tun certs creation end
