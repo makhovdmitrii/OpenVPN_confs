@@ -64,9 +64,24 @@ openssl dhparam -out dh1024.pem 1024
 #For condor tun certs creation begin
 cp vars.example vars
 ./easyrsa init-pki
+./easyrsa build-ca nopass
 ./easyrsa --batch --req-cn="server" build-ca nopass
+# or
 ./easyrsa --batch build-server-full "server" nopass
 EASYRSA_CRL_DAYS=3650 ./easyrsa gen-crl
 openvpn --genkey --secret ./tls-crypt.key
 ./easyrsa --batch build-client-full "client" nopass
 #For condor tun certs creation end
+
+#If error on step
+./easyrsa --batch --req-cn="server" build-ca nopass
+Can't load /etc/openvpn/server/dir_path/easy-rsa/pki/.rnd into RNG
+123...:error:123...:random number generator:RAND_load_file:Cannot open file:../crypto/rand/randfile.c:98:Filename=/etc/openvpn/server/dir_path/easy-rsa/pki/.rnd
+
+cd /pki
+#and manually run
+openssl rand -writerand .rnd
+#then retry 
+./easyrsa init-pki
+./easyrsa --batch --req-cn="server" build-ca nopass
+#End If error
